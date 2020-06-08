@@ -1,0 +1,55 @@
+{
+  "name": "react-orbitdb",
+  "description": "react hooks and providers for working with ipfs orbit-db datasources",
+  "author": "Julien Bouquillon <julien@bouquillon.com>",
+  "version": "0.0.0",
+  "main": "cjs/index.js",
+  "module": "esm/index.js",
+  "browser": "dist/index.js",
+  "license": "Apache-2.0",
+  "files": [
+    "README.md",
+    "cjs",
+    "dist",
+    "esm"
+  ],
+  "dependencies": {
+    "ipfs": "^0.46.0",
+    "orbit-db": "^0.24.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "@socialgouv/eslint-config-react": "^0.22.1",
+    "babel-jest": "^26.0.1",
+    "eslint": "^7.2.0",
+    "gh-pages": "^3.0.0",
+    "jest": "^26.0.1",
+    "parcel-bundler": "^1.12",
+    "prettier": "^2.0.5",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-test-renderer": "^16.13.0"
+  },
+  "peerDependencies": {
+    "prop-types": "15.x",
+    "react": "16.x"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint src",
+    "clean": "rm -rf ./dist",
+    "clean:demo": "rm -rf ./example/dist",
+    "start": "parcel watch ./src/index.js --out-dir ./dist",
+    "start:demo": "parcel ./example/src/index.html --out-dir ./example/dist",
+    "build": "yarn run build:browser && yarn run build:cjs && yarn run build:esm",
+    "build:browser": "parcel build ./src/index.js --global minimum-parcel-lib",
+    "build:cjs": "BABEL_ENV=cjs babel src --out-dir cjs",
+    "build:demo": "parcel build ./example/src/index.html --out-dir ./example/dist --public-url ./",
+    "build:esm": "BABEL_ENV=esm babel src --out-dir esm",
+    "deploy": "gh-pages -d ./example/dist -r https://gitlab-ci-token:$GH_TOKEN@github.com/revolunet/react-orbitdb.git"
+  }
+}
