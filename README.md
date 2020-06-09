@@ -1,6 +1,6 @@
 # react-orbitdb
 
-react hooks and providers for dealing with [IPFS](https://ipfs.io) [orbit-db datasources](https://github.com/orbitdb/orbit-db)
+react hooks and providers for dealing with [IPFS](https://ipfs.io) [orbit-db datasources](https://github.com/orbitdb/orbit-db).
 
 ## Provider
 
@@ -14,7 +14,7 @@ const App = () => <OrbitProvider>...</OrbitProvider>;
 
 #### useOrbitDb
 
-`useOrbitDb` connects and return records from an OrbitDB database. records are updated in real-time.
+`useOrbitDb` connects and return records from an OrbitDB database. `records` are updated in real-time.
 
 ```jsx
 import { useOrbitDb } from "react-orbitdb";
@@ -32,6 +32,7 @@ const MyCmp = () => {
 ```
 
 - `options` : [OrbitDB.open options](https://github.com/orbitdb/orbit-db/blob/master/API.md#orbitdbopenaddress-options)
+  - the `options.create` and `options.public` values set the database world-writeable when you first create it.
 
 #### useOrbit
 

@@ -12,6 +12,9 @@ const ORBIT_DB_EVENTS =
 const ORBIT_DB_DOCS =
   "/orbitdb/zdpuAknUxcYsKArW2d8KtBhwyLfkmADo4wpwmC8ReKy3Q5pDR/react-ortbitdb-docstore";
 
+const ORBIT_DB_KEYVALUE =
+  "/orbitdb/zdpuAod4qh5m3SmjuSVtLUEspqp1yCQABWm1iEdSPFDQ5mUkU/react-ortbitdb-keyvalue";
+
 const Intro = () => (
   <div className="jumbotron">
     <h1 className="display-4">react-orbitdb</h1>
@@ -71,7 +74,6 @@ const DocStoreDemo = () => {
   const { db, records } = useOrbitDb(ORBIT_DB_DOCS, {
     type: "docstore",
     create: true,
-    overwrite: true,
     public: true,
   });
   const addDocument = async () => {
@@ -82,8 +84,8 @@ const DocStoreDemo = () => {
   return (
     <div>
       <p style={{ fontSize: "0.8em" }}>
-        {(records && `Connected to ${ORBIT_DB_EVENTS}`) ||
-          `Connecting to ${ORBIT_DB_EVENTS}...`}
+        {(records && `Connected to ${ORBIT_DB_DOCS}`) ||
+          `Connecting to ${ORBIT_DB_DOCS}...`}
       </p>
       {records && (
         <div>
@@ -102,23 +104,97 @@ const DocStoreDemo = () => {
           </h5>
           <table className="table table-striped">
             <tbody>
-              {records.map((record) => (
-                <tr key={record.id}>
-                  <td>{record.date_created}</td>
-                  <td>{record.title}</td>
-                  <td>
-                    {record.tags.map((tag) => (
-                      <div
-                        key={tag}
-                        className={`badge badge-${getBadgeVariant(tag)}`}
-                        style={{ margin: "0 5px" }}
-                      >
-                        {tag}
-                      </div>
-                    ))}
-                  </td>
-                </tr>
-              ))}
+              {records
+                .reverse()
+                .slice(0, 10)
+                .map((record) => (
+                  <tr key={record.id}>
+                    <td>{record.date_created}</td>
+                    <td>{record.title}</td>
+                    <td>
+                      {record.tags.map((tag) => (
+                        <div
+                          key={tag}
+                          className={`badge badge-${getBadgeVariant(tag)}`}
+                          style={{ margin: "0 5px" }}
+                        >
+                          {tag}
+                        </div>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const newKeyValue = () => {
+  const id = uuid();
+  return [
+    id,
+    {
+      id,
+      title: pick(samples.title),
+      date_created: new Date().toISOString(),
+      tags: Array.from(
+        new Set([pick(samples.tags), pick(samples.tags), pick(samples.tags)])
+      ),
+    },
+  ];
+};
+
+const KeyValueDemo = () => {
+  const { db, records } = useOrbitDb(ORBIT_DB_KEYVALUE, {
+    type: "keyvalue",
+    create: true,
+    public: true,
+  });
+  console.log("records", records);
+  const addKey = async () => {
+    const [key, value] = newKeyValue();
+    await db.put(key, value);
+  };
+
+  return (
+    <div>
+      <p style={{ fontSize: "0.8em" }}>
+        {(records && `Connected to ${ORBIT_DB_KEYVALUE}`) ||
+          `Connecting to ${ORBIT_DB_KEYVALUE}...`}
+      </p>
+      {records && (
+        <div>
+          <h5>
+            keys:{" "}
+            <span style={{ fontVariantNumeric: "tabular-nums" }}>
+              {Object.keys(records).length}
+            </span>{" "}
+            <button
+              style={{ marginLeft: 10 }}
+              className="btn  btn-outline-primary"
+              onClick={addKey}
+            >
+              Add
+            </button>
+          </h5>
+          <table className="table table-striped">
+            <tbody>
+              {Object.keys(records)
+                .reverse()
+                .slice(0, 10)
+                .map((key) => (
+                  <tr key={key}>
+                    <td>{key}</td>
+                    <td>
+                      <pre style={{ fontSize: 10 }}>
+                        {JSON.stringify(records[key], null, 2)}
+                      </pre>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -131,7 +207,6 @@ const EventLogDemo = () => {
   const { db, records } = useOrbitDb(ORBIT_DB_EVENTS, {
     type: "eventlog",
     create: true,
-    overwrite: true,
     public: true,
   });
   const addEvent = () => {
@@ -178,7 +253,7 @@ const EventLogDemo = () => {
                 null}
               {records
                 .reverse()
-                .slice(0, 5)
+                .slice(0, 10)
                 .map((record) => (
                   <tr key={record.date}>
                     <td style={{ fontSize: 10 }}>
@@ -202,6 +277,8 @@ const App = () => (
       <EventLogDemo />
       <h2>docstore</h2>
       <DocStoreDemo />
+      <h2>keyvalue</h2>
+      <KeyValueDemo />
     </OrbitProvider>
   </div>
 );
