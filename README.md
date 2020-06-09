@@ -12,6 +12,8 @@ You can see a demo here : https://revolunet.github.io/react-orbitdb
 `OrbitProvider` creates a shared IPFS Node and an orbit-db instance.
 
 ```js
+import { OrbitProvider } from "react-orbitdb";
+
 const App = () => <OrbitProvider>...</OrbitProvider>;
 ```
 
