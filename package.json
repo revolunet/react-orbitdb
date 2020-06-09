@@ -50,7 +50,7 @@
     "start": "parcel watch ./src/index.js --out-dir ./dist",
     "start:demo": "parcel ./example/src/index.html --out-dir ./example/dist",
     "build": "yarn run build:browser && yarn run build:cjs && yarn run build:esm",
-    "build:browser": "parcel build ./src/index.js --global minimum-parcel-lib",
+    "build:browser": "parcel build ./src/index.js --global react-orbitdb",
     "build:cjs": "BABEL_ENV=cjs babel src --out-dir cjs",
     "build:demo": "parcel build ./example/src/index.html --out-dir ./example/dist --public-url ./",
     "build:esm": "BABEL_ENV=esm babel src --out-dir esm",
