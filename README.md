@@ -17,7 +17,7 @@ import { OrbitProvider } from "react-orbitdb";
 const App = () => <OrbitProvider>...</OrbitProvider>;
 ```
 
-- `config` prop with ipfs configuration can be passer to the provider. (see the [default](./src/ipfs-config.js)
+- `config` prop with ipfs configuration can be passer to the provider. (see the [default](./src/ipfs-config.js))
 
 ## Hooks
 
