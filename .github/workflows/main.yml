@@ -87,7 +87,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   demo:
-    if: github.event_name == 'push' && github.ref == 'master'
+    if: github.ref == 'master'
     runs-on: ubuntu-latest
     steps:
       - name: Set up Node.js ${{ matrix.node-version }}
