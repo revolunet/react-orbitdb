@@ -43,7 +43,7 @@
     "last 2 Firefox versions"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "lint": "eslint src",
     "clean": "rm -rf ./dist",
     "clean:demo": "rm -rf ./example/dist",
