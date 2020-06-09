@@ -1,6 +1,11 @@
 # react-orbitdb
 
+[![](https://img.shields.io/badge/License-Apache--2.0-yellow.svg)](https://opensource.org/licenses/Apache-2.0)
+[![](https://img.shields.io/npm/v/react-orbitdb.svg)](https://www.npmjs.com/package/react-orbitdb)
+
 react hooks and providers for dealing with [IPFS](https://ipfs.io) [orbit-db datasources](https://github.com/orbitdb/orbit-db).
+
+You can see a demo here : https://revolunet.github.io/react-orbitdb
 
 ## Provider
 
@@ -9,6 +14,8 @@ react hooks and providers for dealing with [IPFS](https://ipfs.io) [orbit-db dat
 ```js
 const App = () => <OrbitProvider>...</OrbitProvider>;
 ```
+
+- `config` prop with ipfs configuration can be passer to the provider. (see the [default](./src/ipfs-config.js)
 
 ## Hooks
 
