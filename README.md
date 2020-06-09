@@ -1,6 +1,6 @@
 # react-orbitdb
 
-react hooks and providers for working with [IPFS](https://ipfs.io) [orbit-db datasources](https://github.com/orbitdb/orbit-db)
+react hooks and providers for dealing with [IPFS](https://ipfs.io) [orbit-db datasources](https://github.com/orbitdb/orbit-db)
 
 ## Provider
 

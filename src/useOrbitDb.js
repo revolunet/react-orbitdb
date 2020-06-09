@@ -35,8 +35,9 @@ const useOrbitDb = (address, options = {}) => {
           ? publicWrite(orbit)
           : publicRead(orbit)),
       };
-
+      console.log("orbit.open", address, allOptions);
       const db = await orbit.open(address, allOptions);
+      console.log("orbitdb.opened", db);
       const refreshDb = async () => {
         await db.load();
         if (!orbitDb) {
@@ -50,6 +51,8 @@ const useOrbitDb = (address, options = {}) => {
             .collect()
             .map((e) => e.payload.value);
           setRecords([...allEvents] || []);
+        } else if (db.type === "docstore") {
+          setRecords(db.query(() => true));
         }
       };
       console.log("useOrbitDb.open", address, allOptions);
@@ -74,7 +77,7 @@ const useOrbitDb = (address, options = {}) => {
       createDb();
     }
     return () => {};
-  }, [records, orbitDb, orbit, address, options]);
+  }, [orbit, address, options]);
 
   return { orbit, db: orbitDb, records };
 };

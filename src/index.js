@@ -1,9 +1,6 @@
-export { default as OrbitProvider } from "./OrbitProvider";
-export { default as useOrbitDb } from "./useOrbitDb";
-export { default as useOrbit } from "./useOrbit";
-export { default as useIpfs } from "./useIpfs";
+import OrbitProvider from "./OrbitProvider";
+import useOrbitDb from "./useOrbitDb";
+import useOrbit from "./useOrbit";
+import useIpfs from "./useIpfs";
 
-// export OrbitProvider
-// export useOrbitDb
-// export useOrbit
-// export useIpfs
+export { OrbitProvider, useOrbitDb, useOrbit, useIpfs };

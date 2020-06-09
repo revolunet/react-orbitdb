@@ -16,6 +16,8 @@ const useIpfs = (config) => {
 
       const ipfs = await IPFS.create(config);
       if (typeof window !== "undefined") window.ipfsLoaded = ipfs;
+      const peerId = (await ipfs.id()).id;
+      console.log("IPFS: connected as", peerId);
       setIpfs(ipfs);
     };
     ipfsInit();

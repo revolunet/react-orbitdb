@@ -1,6 +1,6 @@
 {
   "name": "react-orbitdb",
-  "description": "react hooks and providers for working with ipfs orbit-db datasources",
+  "description": "react hooks and providers for dealing with ipfs orbit-db datasources",
   "author": "Julien Bouquillon <julien@bouquillon.com>",
   "version": "0.0.0",
   "main": "cjs/index.js",
@@ -38,6 +38,10 @@
     "prop-types": "15.x",
     "react": "16.x"
   },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions"
+  ],
   "scripts": {
     "test": "jest",
     "lint": "eslint src",

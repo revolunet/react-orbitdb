@@ -16,7 +16,7 @@ const useOrbit = (ipfs) => {
         orbit.stop();
       }
     };
-  }, [orbit, ipfs]);
+  }, [ipfs]);
   return [orbit];
 };
 
