@@ -29,7 +29,10 @@ const App = () => <OrbitProvider>...</OrbitProvider>;
 import { useOrbitDb } from "react-orbitdb";
 
 const MyCmp = () => {
-  const { db, records } = useOrbitDb(dbAddress, options);
+  const { db, records } = useOrbitDb("/orbitdb/somehash/my-db, {
+    create: true,
+    type: 'eventlog'
+  });
 
   return (
     <div>
