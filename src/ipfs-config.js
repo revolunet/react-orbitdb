@@ -7,7 +7,7 @@ const DEFAULT_IPFS_CONFIG = {
     },
   },
   preload: {
-    enabled: true,
+    enabled: false,
   },
   repo: "./some-repo",
   EXPERIMENTAL: { pubsub: true },
