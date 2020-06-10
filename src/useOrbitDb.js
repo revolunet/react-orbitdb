@@ -71,7 +71,7 @@ const useOrbitDb = (address, options = {}) => {
         refreshDb();
       });
 
-      db.events.on("write", (address, entry, heads) => {
+      db.events.on("write", (address) => {
         logger.debug("db.events.write", address.toString());
         refreshDb();
       });
