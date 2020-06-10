@@ -1,6 +1,9 @@
 import { useEffect, useState, useContext } from "react";
+import Logger from "logplease";
 
 import orbitContext from "./orbitContext";
+
+const logger = Logger.create("useOrbitDb");
 
 const publicRead = (orbitdb) => ({
   accessController: {
@@ -35,9 +38,9 @@ const useOrbitDb = (address, options = {}) => {
           ? publicWrite(orbit)
           : publicRead(orbit)),
       };
-      console.log("orbit.open", address, allOptions);
+      logger.debug("orbit.open", address, allOptions);
       const db = await orbit.open(address, allOptions);
-      console.log("orbitdb.opened", db);
+      logger.debug("orbitdb.opened", db.address.toString());
       const refreshDb = async () => {
         await db.load();
         if (!orbitDb) {
@@ -53,22 +56,23 @@ const useOrbitDb = (address, options = {}) => {
           setRecords([...allEvents] || []);
         } else if (db.type === "docstore") {
           setRecords(db.query(() => true));
+        } else if (db.type === "counter") {
+          setRecords(db.value);
         }
       };
-      console.log("useOrbitDb.open", address, allOptions);
 
       db.events.on("replicate", (address) => {
-        console.log("replicate", { address });
+        logger.debug("db.events.replicate", address.toString());
         //refreshDb();
       });
 
       db.events.on("replicated", (address) => {
-        console.log("replicated", { address });
+        logger.debug("db.events.replicated", address.toString());
         refreshDb();
       });
 
       db.events.on("write", (address, entry, heads) => {
-        console.log("write", { address, entry, heads });
+        logger.debug("db.events.write", address.toString());
         refreshDb();
       });
       await refreshDb();
@@ -76,10 +80,20 @@ const useOrbitDb = (address, options = {}) => {
     if (orbit) {
       createDb();
     }
-    return () => {};
+    return () => {
+      if (orbitDb) {
+        logger.debug("db.close()");
+        orbitDb.close();
+      }
+    };
   }, [orbit, address, options]);
 
-  return { orbit, db: orbitDb, records };
+  const state = { orbit, db: orbitDb, records };
+  if (orbitDb && orbitDb.type === "counter") {
+    state.inc = orbitDb.inc.bind(orbitDb);
+    state.value = orbitDb.value;
+  }
+  return state;
 };
 
 export default useOrbitDb;
