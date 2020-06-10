@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import OrbitDB from "orbit-db";
+import Logger from "logplease";
+
+const logger = Logger.create("useOrbit");
 
 const useOrbit = (ipfs) => {
   const [orbit, setOrbit] = useState(null);
@@ -12,7 +15,7 @@ const useOrbit = (ipfs) => {
     if (ipfs) createInstance();
     return () => {
       if (orbit && orbit.stop) {
-        console.log("orbit.stop()");
+        logger.debug("orbit.stop()");
         orbit.stop();
       }
     };

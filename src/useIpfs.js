@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-
+import Logger from "logplease";
 import IPFS from "ipfs";
+
+const logger = Logger.create("useIpfs");
 
 // window.ipfsLoaded hack to keep a global ipfs instance
 const useIpfs = (config) => {
@@ -8,7 +10,7 @@ const useIpfs = (config) => {
 
   useEffect(() => {
     const ipfsInit = async () => {
-      console.log("ipfsInit", config);
+      logger.info("ipfsInit", config);
       if (typeof window !== "undefined" && window.ipfsLoaded) {
         setIpfs(window.ipfsLoaded);
         return;
@@ -17,13 +19,13 @@ const useIpfs = (config) => {
       const ipfs = await IPFS.create(config);
       if (typeof window !== "undefined") window.ipfsLoaded = ipfs;
       const peerId = (await ipfs.id()).id;
-      console.log("IPFS: connected as", peerId);
+      logger.info("IPFS: connected as", peerId);
       setIpfs(ipfs);
     };
     ipfsInit();
     return () => {
       if (ipfs) {
-        console.log("ipfsStop");
+        logger.debug("ipfs.stop()");
         ipfs.stop();
       }
     };
