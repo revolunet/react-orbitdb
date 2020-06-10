@@ -27,7 +27,7 @@ const Intro = () => (
     <hr className="my-4" />
     <p>
       On this page you can find different examples of OrbitDB databases. <br />
-      Other visitors can also interact in real-time with the data. <br />
+      Other visitors/browsers can interact in real-time with the data. <br />
       <br />
       <b>No server!</b>
     </p>
@@ -122,6 +122,13 @@ const DocStoreDemo = () => {
           </h5>
           <table className="table table-striped">
             <tbody>
+              {/* add an hidden row so strip color cycle on each new event */}
+              {(records.length % 2 && (
+                <tr style={{ display: "none" }}>
+                  <td>&nbsp;</td>
+                </tr>
+              )) ||
+                null}
               {records
                 .reverse()
                 .slice(0, 10)
@@ -199,6 +206,13 @@ const KeyValueDemo = () => {
           </h5>
           <table className="table table-striped">
             <tbody>
+              {/* add an hidden row so strip color cycle on each new event */}
+              {(Object.keys(records).length % 2 && (
+                <tr style={{ display: "none" }}>
+                  <td>&nbsp;</td>
+                </tr>
+              )) ||
+                null}
               {Object.keys(records)
                 .reverse()
                 .slice(0, 10)
