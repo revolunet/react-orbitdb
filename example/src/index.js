@@ -15,6 +15,9 @@ const ORBIT_DB_DOCS =
 const ORBIT_DB_KEYVALUE =
   "/orbitdb/zdpuAod4qh5m3SmjuSVtLUEspqp1yCQABWm1iEdSPFDQ5mUkU/react-ortbitdb-keyvalue";
 
+const ORBIT_DB_COUNTER =
+  "/orbitdb/zdpuAzbF3ZzhMsbtw4vkKoP1BEcH1CbgE1fRMUuykQdcbHe7X/react-ortbitdb-counter";
+
 const Intro = () => (
   <div className="jumbotron">
     <h1 className="display-4">react-orbitdb</h1>
@@ -22,12 +25,27 @@ const Intro = () => (
       React hooks and providers for dealing with IPFS Orbit-db datasources.
     </p>
     <hr className="my-4" />
+    <p>
+      On this page you can find different examples of OrbitDB databases. <br />
+      Other visitors can also interact in real-time with the data. <br />
+      <br />
+      <b>No server!</b>
+    </p>
+    <hr className="my-4" />
     <a
       className="btn btn-outline-primary"
       href="https://github.com/revolunet/react-orbitdb"
       role="button"
     >
-      See on GitHub
+      See project on GitHub
+    </a>
+    &nbsp;
+    <a
+      className="btn btn-outline-primary"
+      href="https://github.com/revolunet/react-orbitdb/blob/master/example/src/index.js"
+      role="button"
+    >
+      This page source code
     </a>
   </div>
 );
@@ -153,7 +171,6 @@ const KeyValueDemo = () => {
     create: true,
     public: true,
   });
-  console.log("records", records);
   const addKey = async () => {
     const [key, value] = newKeyValue();
     await db.put(key, value);
@@ -217,7 +234,7 @@ const EventLogDemo = () => {
   };
   useEffect(() => {
     if (db) {
-      console.log("add an event on first load");
+      // add an event on first load
       addEvent();
     }
   }, [db]);
@@ -236,7 +253,7 @@ const EventLogDemo = () => {
             </span>{" "}
             <button
               style={{ marginLeft: 10 }}
-              className="btn  btn-outline-primary"
+              className="btn btn-outline-primary"
               onClick={addEvent}
             >
               Add
@@ -269,16 +286,60 @@ const EventLogDemo = () => {
   );
 };
 
+const CounterDemo = () => {
+  const { inc, value } = useOrbitDb(ORBIT_DB_COUNTER, {
+    type: "counter",
+    create: true,
+    public: true,
+  });
+  const add = () => {
+    inc();
+  };
+  return (
+    <div>
+      <p style={{ fontSize: "0.8em" }}>
+        {(value && `Connected to ${ORBIT_DB_COUNTER}`) ||
+          `Connecting to ${ORBIT_DB_COUNTER}...`}
+      </p>
+      {value && (
+        <h1>
+          <span
+            className="badge badge-primary"
+            style={{ fontVariantNumeric: "tabular-nums" }}
+          >
+            {value}
+          </span>
+          <button
+            style={{ marginLeft: 10 }}
+            className="btn btn-outline-primary"
+            onClick={add}
+          >
+            Add
+          </button>
+        </h1>
+      )}
+    </div>
+  );
+};
+
 const App = () => (
   <div>
     <OrbitProvider>
       <Intro />
+      <h2>counter</h2>
+      <CounterDemo />
+      <br />
       <h2>eventlog</h2>
       <EventLogDemo />
+      <br />
       <h2>docstore</h2>
       <DocStoreDemo />
+      <br />
       <h2>keyvalue</h2>
       <KeyValueDemo />
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
     </OrbitProvider>
   </div>
 );
