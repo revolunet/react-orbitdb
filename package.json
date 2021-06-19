@@ -2,7 +2,7 @@
   "name": "react-orbitdb",
   "description": "react hooks and providers for dealing with ipfs orbit-db datasources",
   "author": "Julien Bouquillon <julien@bouquillon.com>",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "main": "cjs/index.js",
   "module": "esm/index.js",
   "browser": "dist/index.js",
