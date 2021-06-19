@@ -14,7 +14,7 @@
     "esm"
   ],
   "dependencies": {
-    "ipfs": "^0.46.0",
+    "ipfs": "^0.55.4",
     "logplease": "^1.2.15",
     "orbit-db": "^0.24.1"
   },
