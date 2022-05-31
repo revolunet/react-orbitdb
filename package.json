@@ -49,7 +49,7 @@
     "clean": "rm -rf ./dist",
     "clean:demo": "rm -rf ./example/dist",
     "start": "parcel watch ./src/index.js --out-dir ./dist",
-    "start:demo": "parcel ./example/src/index.html --out-dir ./example/dist",
+    "start:demo": "parcel serve ./example/src/index.html --out-dir ./example/dist",
     "build": "yarn run build:browser && yarn run build:cjs && yarn run build:esm",
     "build:browser": "parcel build ./src/index.js --global react-orbitdb",
     "build:cjs": "BABEL_ENV=cjs babel src --out-dir cjs",
