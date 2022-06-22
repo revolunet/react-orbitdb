@@ -27,19 +27,26 @@ const useOrbitDb = (address, options = {}) => {
     if (!address) return;
 
     const createDb = async () => {
+      logger.debug("orbit.create", address);
+
       const allOptions = {
         indexBy: "id",
-        create: false,
+        create: true, // doesnt really work ?
         type: "keyvalue",
         overwrite: false,
         ...options,
-        // options.public controls write access
+        // // options.public controls write access
         ...(options.create && options.public
           ? publicWrite(orbit)
           : publicRead(orbit)),
       };
-      logger.debug("orbit.open", address, allOptions);
-      const db = await orbit.open(address, allOptions);
+      const dbAddress = await orbit.determineAddress(
+        address,
+        allOptions.type,
+        allOptions
+      );
+      logger.debug("orbit.open", dbAddress, allOptions);
+      const db = await orbit.open(dbAddress, allOptions);
       logger.debug("orbitdb.opened", db.address.toString());
       const refreshDb = async () => {
         await db.load();
@@ -73,6 +80,11 @@ const useOrbitDb = (address, options = {}) => {
 
       db.events.on("write", (address) => {
         logger.debug("db.events.write", address.toString());
+        refreshDb();
+      });
+
+      db.events.on("error", (err) => {
+        logger.debug("db.events.error", err);
         refreshDb();
       });
       await refreshDb();
