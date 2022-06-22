@@ -6,17 +6,17 @@ import { OrbitProvider, useOrbitDb } from "../../src";
 
 window.LOG = "*";
 
-const ORBIT_DB_EVENTS =
-  "/orbitdb/zdpuB2cZqW3mNmAM1tZ6mNPpcw6bSdNKNgPw4ppqJpnjS8Teg/react-ortbitdb-eventlog";
+const ORBIT_DB_EVENTS = "react-ortbitdb-eventlog";
+//"/orbitdb/zdpuB2cZqW3mNmAM1tZ6mNPpcw6bSdNKNgPw4ppqJpnjS8Teg/react-ortbitdb-eventlog";
 
-const ORBIT_DB_DOCS =
-  "/orbitdb/zdpuAknUxcYsKArW2d8KtBhwyLfkmADo4wpwmC8ReKy3Q5pDR/react-ortbitdb-docstore";
+const ORBIT_DB_DOCS = "react-ortbitdb-docstore";
+//"/orbitdb/zdpuAknUxcYsKArW2d8KtBhwyLfkmADo4wpwmC8ReKy3Q5pDR/react-ortbitdb-docstore";
 
-const ORBIT_DB_KEYVALUE =
-  "/orbitdb/zdpuAod4qh5m3SmjuSVtLUEspqp1yCQABWm1iEdSPFDQ5mUkU/react-ortbitdb-keyvalue";
+const ORBIT_DB_KEYVALUE = "react-ortbitdb-keyvalue";
+//"/orbitdb/zdpuAod4qh5m3SmjuSVtLUEspqp1yCQABWm1iEdSPFDQ5mUkU/react-ortbitdb-keyvalue";
 
-const ORBIT_DB_COUNTER =
-  "/orbitdb/zdpuAzbF3ZzhMsbtw4vkKoP1BEcH1CbgE1fRMUuykQdcbHe7X/react-ortbitdb-counter";
+const ORBIT_DB_COUNTER = "react-ortbitdb-counter";
+//"/orbitdb/zdpuAzbF3ZzhMsbtw4vkKoP1BEcH1CbgE1fRMUuykQdcbHe7X/react-ortbitdb-counter";
 
 const Intro = () => (
   <div className="jumbotron">
@@ -312,10 +312,10 @@ const CounterDemo = () => {
   return (
     <div>
       <p style={{ fontSize: "0.8em" }}>
-        {(value && `Connected to ${ORBIT_DB_COUNTER}`) ||
+        {(value !== undefined && `Connected to ${ORBIT_DB_COUNTER}`) ||
           `Connecting to ${ORBIT_DB_COUNTER}...`}
       </p>
-      {value && (
+      {value !== undefined && (
         <h1>
           <span
             className="badge badge-primary"
