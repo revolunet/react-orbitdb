@@ -53,3 +53,10 @@ const MyCmp = () => {
 #### useIpfs
 
 `useIpfs` is included in `OrbitProvider`, you should not need it
+
+## Development 
+1. Checkout this repo 
+2. Run ```yarn```
+3. Run ```yarn start``` to run example
+4. Run ```yarn build``` to build example
+
