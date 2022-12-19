@@ -12,7 +12,7 @@ You can see a demo here : https://revolunet.github.io/react-orbitdb
 `OrbitProvider` creates a shared IPFS Node and an orbit-db instance.
 
 ```js
-import { OrbitProvider } from "react-orbitdb";
+import { OrbitProvider } from "@decentrasol/react-orbitdb";
 
 const App = () => <OrbitProvider>...</OrbitProvider>;
 ```
@@ -26,7 +26,7 @@ const App = () => <OrbitProvider>...</OrbitProvider>;
 `useOrbitDb` connects and return records from an OrbitDB database. `records` are updated in real-time.
 
 ```jsx
-import { useOrbitDb } from "react-orbitdb";
+import { useOrbitDb } from "@decentrasol/react-orbitdb";
 
 const MyCmp = () => {
   const { db, records } = useOrbitDb("/orbitdb/somehash/my-db, {
