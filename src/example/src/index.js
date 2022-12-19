@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
-import { render } from "react-dom";
-import uuid from "uuid";
-
-import { OrbitProvider, useOrbitDb } from "../../src";
+import { v4 as uuid } from 'uuid';
+import { useOrbitDb } from "../../lib";
 
 window.LOG = "*";
 
@@ -18,7 +16,7 @@ const ORBIT_DB_KEYVALUE = "react-ortbitdb-keyvalue";
 const ORBIT_DB_COUNTER = "react-ortbitdb-counter";
 //"/orbitdb/zdpuAzbF3ZzhMsbtw4vkKoP1BEcH1CbgE1fRMUuykQdcbHe7X/react-ortbitdb-counter";
 
-const Intro = () => (
+export const Intro = () => (
   <div className="jumbotron">
     <h1 className="display-4">react-orbitdb</h1>
     <p className="lead">
@@ -88,7 +86,7 @@ const getBadgeVariant = (value) => {
   return "primary";
 };
 
-const DocStoreDemo = () => {
+export const DocStoreDemo = () => {
   const { db, records } = useOrbitDb(ORBIT_DB_DOCS, {
     type: "docstore",
     create: true,
@@ -157,7 +155,7 @@ const DocStoreDemo = () => {
   );
 };
 
-const newKeyValue = () => {
+export const newKeyValue = () => {
   const id = uuid();
   return [
     id,
@@ -172,7 +170,7 @@ const newKeyValue = () => {
   ];
 };
 
-const KeyValueDemo = () => {
+export const KeyValueDemo = () => {
   const { db, records } = useOrbitDb(ORBIT_DB_KEYVALUE, {
     type: "keyvalue",
     create: true,
@@ -234,18 +232,20 @@ const KeyValueDemo = () => {
   );
 };
 
-const EventLogDemo = () => {
+export const EventLogDemo = () => {
   const { db, records } = useOrbitDb(ORBIT_DB_EVENTS, {
     type: "eventlog",
     create: true,
     public: true,
   });
+  
   const addEvent = () => {
     db.add({
       date: new Date().toISOString(),
       ua: navigator.userAgent,
     });
   };
+
   useEffect(() => {
     if (db) {
       // add an event on first load
@@ -300,7 +300,7 @@ const EventLogDemo = () => {
   );
 };
 
-const CounterDemo = () => {
+export const CounterDemo = () => {
   const { inc, value } = useOrbitDb(ORBIT_DB_COUNTER, {
     type: "counter",
     create: true,
@@ -336,28 +336,6 @@ const CounterDemo = () => {
   );
 };
 
-const App = () => (
-  <div>
-    <OrbitProvider>
-      <Intro />
-      <h2>counter</h2>
-      <CounterDemo />
-      <br />
-      <h2>eventlog</h2>
-      <EventLogDemo />
-      <br />
-      <h2>docstore</h2>
-      <DocStoreDemo />
-      <br />
-      <h2>keyvalue</h2>
-      <KeyValueDemo />
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
-    </OrbitProvider>
-  </div>
-);
-
 //const Demo = () => <div>io</div>;
 
-render(<App />, document.getElementById("root"));
+//render(<App />, document.getElementById("root"));
