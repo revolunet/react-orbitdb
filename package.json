@@ -1,6 +1,6 @@
 {
-  "name": "orbitblog",
-  "version": "0.1.3",
+  "name": "react-orbitdb",
+  "version": "0.1.4",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
