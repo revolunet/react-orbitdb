@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Logger from "logplease";
-import IPFS from "ipfs";
+import {create} from 'ipfs'
 
 const logger = Logger.create("useIpfs");
 
@@ -16,7 +16,7 @@ const useIpfs = (config) => {
         return;
       }
 
-      const ipfs = await IPFS.create(config);
+      const ipfs = await create(config);
       if (typeof window !== "undefined") window.ipfsLoaded = ipfs;
       const peerId = (await ipfs.id()).id;
       logger.info("IPFS: connected as", peerId);
