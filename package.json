@@ -1,7 +1,10 @@
 {
-  "name": "react-orbitdb",
+  "name": "@decentrasol/react-orbitdb",
   "version": "0.1.4",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/index.js",
   "module": "dist/index.js",
   "files": [
