@@ -60,18 +60,6 @@ jobs:
       - name: Build
         run: yarn build
 
-  release:
-    needs: [build]
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-
-      - uses: actions/checkout@v2
-
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
         with:
@@ -85,4 +73,3 @@ jobs:
           GIT_COMMITTER_NAME: ${{ secrets.GIT_AUTHOR_NAME }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
