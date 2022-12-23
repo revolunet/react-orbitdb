@@ -79,10 +79,9 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "dependencies": {
-    "ipfs": "^0.59.1",
-    "orbit-db": "^0.28.6",
-    "orbit-db-identity-provider": "^0.4.0",
-    "orbit-db-io": "^1.0.2",
+    "ipfs": "^0.46.0",
+    "logplease": "^1.2.15",
+    "orbit-db": "^0.24.1",
     "uuid": "^9.0.0"
   },
   "scripts": {

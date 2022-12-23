@@ -4,21 +4,25 @@ import Logger from "logplease";
 
 const logger = Logger.create("useOrbit");
 
-const useOrbit = (ipfs) => {
+const useOrbit = (ipfs,options) => {
+
   const [orbit, setOrbit] = useState(null);
 
   useEffect(() => {
+
     const createInstance = async () => {
-      const instance = await OrbitDB.createInstance(ipfs);
+      const instance = await OrbitDB.createInstance(ipfs,options);
       setOrbit(instance);
-    };
+    }
+    
     if (ipfs) createInstance();
     return () => {
       if (orbit && orbit.stop) {
         logger.debug("orbit.stop()");
         orbit.stop();
       }
-    };
+    }
+
   }, [ipfs]);
   return [orbit];
 };

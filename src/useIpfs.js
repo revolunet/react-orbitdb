@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Logger from "logplease";
 import {create} from 'ipfs'
+// import {IPFS} from 'ipfs'
 
 const logger = Logger.create("useIpfs");
 

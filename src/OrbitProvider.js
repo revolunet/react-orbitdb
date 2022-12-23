@@ -6,10 +6,12 @@ import useOrbit from "./useOrbit";
 import orbitContext from "./orbitContext";
 
 const OrbitProvider = ({ config = DEFAULT_IPFS_CONFIG, ...props }) => {
+
   const [ipfs] = useIpfs(config);
   const [orbit] = useOrbit(ipfs);
   const [value, setValue] = useState(null);
   const { Provider } = orbitContext;
+  
   useEffect(() => {
     if (ipfs && orbit) {
       setValue(orbit);

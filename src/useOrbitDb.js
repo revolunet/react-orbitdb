@@ -27,8 +27,8 @@ const useOrbitDb = (address, options = {}) => {
     if (!address) return;
 
     const createDb = async () => {
-      logger.debug("orbit.create", address);
 
+      logger.debug("orbit.create", address);
       const allOptions = {
         indexBy: "id",
         create: true, // doesnt really work ?
@@ -40,14 +40,17 @@ const useOrbitDb = (address, options = {}) => {
           ? publicWrite(orbit)
           : publicRead(orbit)),
       };
+
       const dbAddress = await orbit.determineAddress(
         address,
         allOptions.type,
         allOptions
       );
+
       logger.debug("orbit.open", dbAddress, allOptions);
       const db = await orbit.open(dbAddress, allOptions);
       logger.debug("orbitdb.opened", db.address.toString());
+
       const refreshDb = async () => {
         await db.load();
         if (!orbitDb) {
@@ -66,7 +69,11 @@ const useOrbitDb = (address, options = {}) => {
         } else if (db.type === "counter") {
           setRecords(db.value);
         }
-      };
+      }
+      db.events.on("ready", () => {
+        logger.debug("db.events.ready", address.toString());
+        // refreshDb();
+      });
 
       db.events.on("replicate", (address) => {
         logger.debug("db.events.replicate", address.toString());

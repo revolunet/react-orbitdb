@@ -155,7 +155,7 @@ export const DocStoreDemo = () => {
   );
 };
 
-export const newKeyValue = () => {
+const newKeyValue = () => {
   const id = uuid();
   return [
     id,
