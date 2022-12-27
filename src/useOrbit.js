@@ -12,6 +12,7 @@ const useOrbit = (ipfs,options) => {
 
     const createInstance = async () => {
       const instance = await OrbitDB.createInstance(ipfs,options);
+      logger.debug("created orbit instance",instance);
       setOrbit(instance);
     }
     

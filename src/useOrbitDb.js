@@ -26,29 +26,37 @@ const useOrbitDb = (address, options = {}) => {
     if (orbitDb) return;
     if (!address) return;
 
-    const createDb = async () => {
+    const createDb = async (dbAddress) => {
 
       logger.debug("orbit.create", address);
       const allOptions = {
-        indexBy: "id",
-        create: true, // doesnt really work ?
-        type: "keyvalue",
-        overwrite: false,
-        ...options,
-        // // options.public controls write access
-        ...(options.create && options.public
-          ? publicWrite(orbit)
-          : publicRead(orbit)),
-      };
+        accessController: {
+          type: 'orbitdb'
+        },
+        ...options
+      }
+      // const allOptions = {
+      //   indexBy: "id",
+      //   create: true, // doesnt really work ?
+      //   type: "keyvalue",
+      //   overwrite: false,
+      //   ...options,
+      //   // // options.public controls write access
+      //   ...(options.create && options.public
+      //     ? publicWrite(orbit)
+      //     : publicRead(orbit)),
+      // };
 
-      const dbAddress = await orbit.determineAddress(
-        address,
-        allOptions.type,
-        allOptions
-      );
+      // const dbAddress = await orbit.determineAddress(
+      //   address,
+      //   allOptions.type,
+      //   allOptions
+      // );
 
       logger.debug("orbit.open", dbAddress, allOptions);
-      const db = await orbit.open(dbAddress, allOptions);
+
+      const db = await orbit.feed(dbAddress, allOptions)
+      // const db = await orbit.open(dbAddress, allOptions);
       logger.debug("orbitdb.opened", db.address.toString());
 
       const refreshDb = async () => {
@@ -58,12 +66,10 @@ const useOrbitDb = (address, options = {}) => {
         }
         if (db.type === "keyvalue") {
           setRecords({ ...(db.all || {}) });
-        } else if (db.type === "eventlog") {
-          const allEvents = await db
-            .iterator({ limit: -1 })
-            .collect()
-            .map((e) => e.payload.value);
-          setRecords([...allEvents] || []);
+        } else if (db.type === "eventlog" || db.type === "feed") {
+          const allEvents = []
+          db.all.map((obj) => allEvents.push(obj.payload.value));
+          setRecords(allEvents);
         } else if (db.type === "docstore") {
           setRecords(db.query(() => true));
         } else if (db.type === "counter") {
@@ -71,7 +77,8 @@ const useOrbitDb = (address, options = {}) => {
         }
       }
       db.events.on("ready", () => {
-        logger.debug("db.events.ready", address.toString());
+        // logger.debug("db.events.ready", address.toString());
+        // db.all.map((obj) => logger.debug(obj.payload));
         // refreshDb();
       });
 
@@ -97,7 +104,7 @@ const useOrbitDb = (address, options = {}) => {
       await refreshDb();
     };
     if (orbit) {
-      createDb();
+      createDb(address);
     }
     return () => {
       if (orbitDb) {
