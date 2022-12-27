@@ -13,9 +13,9 @@ const ORBIT_DB_DOCS = "react-ortbitdb-docstore";
 const ORBIT_DB_KEYVALUE = "react-ortbitdb-keyvalue";
 //"/orbitdb/zdpuAod4qh5m3SmjuSVtLUEspqp1yCQABWm1iEdSPFDQ5mUkU/react-ortbitdb-keyvalue";
 
-const ORBIT_DB_COUNTER = "react-ortbitdb-counter";
+// const ORBIT_DB_COUNTER = "react-ortbitdb-counter";
 //"/orbitdb/zdpuAzbF3ZzhMsbtw4vkKoP1BEcH1CbgE1fRMUuykQdcbHe7X/react-ortbitdb-counter";
-
+const ORBIT_DB_COUNTER = "/orbitdb/zdpuAu9RHTJZmNBrT5VGjbpDV5vGEFE1T9SCSxrZ3cVVVRtir/react-ortbitdb-counter"
 export const Intro = () => (
   <div className="jumbotron">
     <h1 className="display-4">react-orbitdb</h1>
@@ -65,7 +65,7 @@ const samples = {
 };
 
 const newDocument = () => ({
-  id: uuid(),
+  _id: uuid(),
   title: pick(samples.title),
   date_created: new Date().toISOString(),
   tags: Array.from(
@@ -86,11 +86,10 @@ const getBadgeVariant = (value) => {
   return "primary";
 };
 
-export const DocStoreDemo = () => {
+export const DocStoreDemo = (props) => {
   const { db, records } = useOrbitDb(ORBIT_DB_DOCS, {
     type: "docstore",
-    create: true,
-    public: true,
+    ...props.options
   });
   const addDocument = async () => {
     const doc = newDocument();
@@ -130,14 +129,14 @@ export const DocStoreDemo = () => {
               {records
                 .reverse()
                 .slice(0, 10)
-                .map((record) => (
-                  <tr key={record.id}>
+                .map((record,i) => (
+                  <tr key={record.id?record.id:i}>
                     <td>{record.date_created}</td>
                     <td>{record.title}</td>
                     <td>
-                      {record.tags.map((tag) => (
+                      {record.tags.map((tag,j) => (
                         <div
-                          key={tag}
+                          key={j}
                           className={`badge badge-${getBadgeVariant(tag)}`}
                           style={{ margin: "0 5px" }}
                         >
@@ -170,11 +169,10 @@ const newKeyValue = () => {
   ];
 };
 
-export const KeyValueDemo = () => {
+export const KeyValueDemo = (props) => {
   const { db, records } = useOrbitDb(ORBIT_DB_KEYVALUE, {
     type: "keyvalue",
-    create: true,
-    public: true,
+    ...props.options
   });
   const addKey = async () => {
     const [key, value] = newKeyValue();
@@ -232,11 +230,10 @@ export const KeyValueDemo = () => {
   );
 };
 
-export const EventLogDemo = () => {
+export const EventLogDemo = (props) => {
   const { db, records } = useOrbitDb(ORBIT_DB_EVENTS, {
     type: "eventlog",
-    create: true,
-    public: true,
+    ...props.options
   });
   
   const addEvent = () => {
@@ -285,10 +282,10 @@ export const EventLogDemo = () => {
               {records
                 .reverse()
                 .slice(0, 10)
-                .map((record) => (
-                  <tr key={record.date}>
+                .map((record,i) => (
+                  <tr key={i}>
                     <td style={{ fontSize: 10 }}>
-                      {record.date}-{record.ua}
+                      {record?.date}-{record?.ua}
                     </td>
                   </tr>
                 ))}
@@ -300,11 +297,11 @@ export const EventLogDemo = () => {
   );
 };
 
-export const CounterDemo = () => {
+export const CounterDemo = (props) => {
+
   const { inc, value } = useOrbitDb(ORBIT_DB_COUNTER, {
     type: "counter",
-    create: true,
-    public: true,
+    ...props.options
   });
   const add = () => {
     inc();

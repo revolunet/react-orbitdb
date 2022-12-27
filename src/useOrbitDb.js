@@ -1,24 +1,23 @@
 import { useEffect, useState, useContext } from "react";
 import Logger from "logplease";
-
 import orbitContext from "./orbitContext";
-
 const logger = Logger.create("useOrbitDb");
 
-const publicRead = (orbitdb) => ({
-  accessController: {
-    write: [orbitdb.identity.id],
-  },
-});
+// const publicRead = (orbitdb) => ({
+//   accessController: {
+//     write: [orbitdb.identity.id],
+//   },
+// });
 
-const publicWrite = () => ({
-  accessController: {
-    write: ["*"],
-    admin: ["*"],
-  },
-});
+// const publicWrite = () => ({
+//   accessController: {
+//     write: ["*"],
+//     admin: ["*"],
+//   },
+// });
 
 const useOrbitDb = (address, options = {}) => {
+
   const orbit = useContext(orbitContext);
   const [records, setRecords] = useState(null);
   const [orbitDb, setDb] = useState(null);
@@ -52,24 +51,37 @@ const useOrbitDb = (address, options = {}) => {
       //   allOptions.type,
       //   allOptions
       // );
-
+      console.log('orbit.open')
       logger.debug("orbit.open", dbAddress, allOptions);
 
-      const db = await orbit.feed(dbAddress, allOptions)
-      // const db = await orbit.open(dbAddress, allOptions);
+      // const db = await orbit.feed(dbAddress, allOptions)
+      const db = await orbit.open(dbAddress, allOptions);
       logger.debug("orbitdb.opened", db.address.toString());
-
+      console.log('orbitdb.opened')
       const refreshDb = async () => {
         await db.load();
         if (!orbitDb) {
           setDb(db);
         }
         if (db.type === "keyvalue") {
+          console.log(db.all)
+          // setRecords(db.all!==undefined?db.all:{});
           setRecords({ ...(db.all || {}) });
-        } else if (db.type === "eventlog" || db.type === "feed") {
+        } else if (db.type === "eventlog"){
+          const allEvents = await db
+            .iterator({ limit: -1 })
+            .collect()
+            .map((e) => e.payload.value);
+          setRecords([...allEvents] || []);
+
+        } else if (db.type === "feed") {
           const allEvents = []
-          db.all.map((obj) => allEvents.push(obj.payload.value));
+          console.log(db.all)
+          db.all.map((obj) => obj?.payload?.value?allEvents.push(obj?.payload?.value):undefined);
+          
           setRecords(allEvents);
+          // setRecords(...(db.all.map((obj) => obj?.payload?.value) || []));
+            // setRecords(db.all.map((obj) => obj?.payload?.value));
         } else if (db.type === "docstore") {
           setRecords(db.query(() => true));
         } else if (db.type === "counter") {

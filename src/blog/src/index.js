@@ -4,7 +4,6 @@ import Identities from 'orbit-db-identity-provider'
 import Logger from "logplease";
 Logger.setLogLevel(Logger.LogLevels.DEBUG) 
 
-
 export const ArticelsFrame = () => {
 
     const [identity, setIdentity] = useState();
@@ -20,24 +19,19 @@ export const ArticelsFrame = () => {
     ,[])
 
     const { db, records } = useOrbitDb("/orbitdb/zdpuAwvjEAmyoeLr3sghDNhpGN4vdX2N5dSjqBfXjsEN1cXpJ/nicokrause.com-22", {
-        // type: "feed",
-        // create: true,
-        // public: false,
-        identity,
-        accessController: {
-          type: 'orbitdb'
-        }
+        type: "feed",
+        identity
     })
-
-    const listItems = records?records.map((ob) => {
-          return <li>{ob.subject}</li>;
+    console.log(records)
+    const listItems = records?records.map((ob,i) => {
+          return <li key={i}>{ob.subject}</li>;
         })
       : "";
 
     return (
       <div>
-        ArticelFrame
-        {listItems}
+          ArticelFrame
+          {listItems}
       </div>
     );
 }
