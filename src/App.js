@@ -1,7 +1,5 @@
 import React, {useState,useEffect} from "react";
-import OrbitProvider from "./OrbitProvider";
 import Identities from 'orbit-db-identity-provider'
-import {ArticelsFrame} from "./blog/src/index";
 import OriginalApp from "./OriginalApp";
 
 const App = () => {
