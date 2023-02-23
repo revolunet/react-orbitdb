@@ -59,7 +59,10 @@ const OriginalApp = (props) => {
         <div> 
             Original App
             <p>
-            <button onClick={()=>connect()}>{account===undefined?'Connect Metamask':account}</button>
+                <button onClick={()=>console.log("switching ")}>Use Metamask for Ethereum Identity Provider</button>
+            </p>
+            <p>
+                <button onClick={()=>connect()}>{account===undefined?'Connect Metamask':account}</button>
             </p>
             <OrbitProvider config={config} options={options}>
               <Intro />

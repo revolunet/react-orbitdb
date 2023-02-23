@@ -1,6 +1,6 @@
 {
   "name": "@decentrasol/react-orbitdb",
-  "version": "0.2",
+  "version": "0.2.1",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -79,8 +79,6 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "dependencies": {
-    "@decentrasol/orbit-db-powergate-io": "0.3.8",
-    "@metamask/detect-provider": "^2.0.0",
     "aleph-sdk-ts": "^3.2.2",
     "ethers": "^5.7.2",
     "ipfs": "^0.66.0",
