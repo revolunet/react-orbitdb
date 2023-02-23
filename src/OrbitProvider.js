@@ -5,7 +5,7 @@ import useIpfs from "./useIpfs";
 import useOrbit from "./useOrbit";
 import orbitContext from "./orbitContext";
 
-const OrbitProvider = ({ config = DEFAULT_IPFS_CONFIG, ...props }) => {
+const OrbitProvider = ({ config = DEFAULT_IPFS_CONFIG, ...props },account) => {
 
   const [ipfs] = useIpfs(config);
   const [orbit] = useOrbit(ipfs,props.options?props.options:{});

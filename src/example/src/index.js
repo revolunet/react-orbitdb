@@ -1,21 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { v4 as uuid } from 'uuid';
 import { useOrbitDb } from "../../lib";
+import { useMetaMask} from "metamask-react";
 
-window.LOG = "*";
+
+// window.LOG = "*";
+// const ORBIT_DB_COUNTER = "react-ortbitdb-counter";
+// const ORBIT_DB_COUNTER = "/orbitdb/zdpuAztsdh7v5kfARfJFFF1natKfbHrEmkZJENFXbuHtQLenz/react-ortbitdb-counter"
 
 const ORBIT_DB_EVENTS = "react-ortbitdb-eventlog";
 //"/orbitdb/zdpuB2cZqW3mNmAM1tZ6mNPpcw6bSdNKNgPw4ppqJpnjS8Teg/react-ortbitdb-eventlog";
 
-const ORBIT_DB_DOCS = "react-ortbitdb-docstore";
+// const ORBIT_DB_DOCS = "react-ortbitdb-docstore";
+const ORBIT_DB_DOCS = "/orbitdb/zdpuAqeFJo4cC7tTDjWeuHMgwdcRRKTNrntzJaPFMSBSBw1jA/react-ortbitdb-docstore/"
 //"/orbitdb/zdpuAknUxcYsKArW2d8KtBhwyLfkmADo4wpwmC8ReKy3Q5pDR/react-ortbitdb-docstore";
 
 const ORBIT_DB_KEYVALUE = "react-ortbitdb-keyvalue";
 //"/orbitdb/zdpuAod4qh5m3SmjuSVtLUEspqp1yCQABWm1iEdSPFDQ5mUkU/react-ortbitdb-keyvalue";
 
-// const ORBIT_DB_COUNTER = "react-ortbitdb-counter";
+
+// const ORBIT_DB_COUNTER = "/orbitdb/zdpuAxgWxVeeSqia2D4TV8i6V8CFR5o3CTEzW4rQu9erkQvbV/react-ortbitdb-counter"
+// const ORBIT_DB_COUNTER = "/orbitdb/zdpuAnE3pv17bBFDQeLoz8zsvD4EcBNuMUfRB2YtD7gp7kP29/react-ortbitdb-counter"
+// const ORBIT_DB_COUNTER = "/orbitdb/zdpuAm3HjKy98acAPVo6eSC7utPduBo1SMT3foSX85pRTrhcq/react-ortbitdb-counter"
 //"/orbitdb/zdpuAzbF3ZzhMsbtw4vkKoP1BEcH1CbgE1fRMUuykQdcbHe7X/react-ortbitdb-counter";
-const ORBIT_DB_COUNTER = "/orbitdb/zdpuAu9RHTJZmNBrT5VGjbpDV5vGEFE1T9SCSxrZ3cVVVRtir/react-ortbitdb-counter"
+// const ORBIT_DB_COUNTER = "/orbitdb/zdpuB2bk9hwdA6HR4hpErvSWybTDjGtvxvTKAvxMuiZSyWFq5/react-ortbitdb-counter"
+
 export const Intro = () => (
   <div className="jumbotron">
     <h1 className="display-4">react-orbitdb</h1>
@@ -231,11 +240,21 @@ export const KeyValueDemo = (props) => {
 };
 
 export const EventLogDemo = (props) => {
+
+  const { status, connect, account, chainId, ethereum, switchChain, addChain } = useMetaMask();
+
   const { db, records } = useOrbitDb(ORBIT_DB_EVENTS, {
     type: "eventlog",
+    create: true,
     ...props.options
-  });
-  
+  }, props.identity);
+
+  useEffect(() => {
+    if(db) {
+      props.setDB(db)
+      console.log("setting orbitDb", db)}
+  }, [db]);
+
   const addEvent = () => {
     db.add({
       date: new Date().toISOString(),
@@ -249,10 +268,11 @@ export const EventLogDemo = (props) => {
       addEvent();
     }
   }, [db]);
+
   return (
     <div>
       <p style={{ fontSize: "0.8em" }}>
-        {(records && `Connected to ${ORBIT_DB_EVENTS}`) ||
+        {(records && `Connected to ${db?.id}`) ||
           `Connecting to ${ORBIT_DB_EVENTS}...`}
       </p>
       {records && (
@@ -299,19 +319,34 @@ export const EventLogDemo = (props) => {
 
 export const CounterDemo = (props) => {
 
-  const { inc, value } = useOrbitDb(ORBIT_DB_COUNTER, {
+  const { inc, value, db } = useOrbitDb( props.db, {
     type: "counter",
+    create: true,
     ...props.options
   });
+  useEffect(() => {
+    console.log("props.options",props.options)
+  }, [props.options])
+  console.log("identity.db",db?.identity)
+
+  useEffect(() => {
+    console.log("db changed",db)
+    if(db) props.setDB(db)
+  }, [db]);
+
+  if(props.db===undefined){
+    console.log("please provide orbit db prop as the orbit db name  ")
+    return <div> db prop undefined </div>
+  }
   const add = () => {
     inc();
   };
   return (
     <div>
       <p style={{ fontSize: "0.8em" }}>
-        {(value !== undefined && `Connected to ${ORBIT_DB_COUNTER}`) ||
-          `Connecting to ${ORBIT_DB_COUNTER}...`}
+        {(value !== undefined && `Connected to ${db.id}`) || `Connecting to ${props.db}...`}
       </p>
+      <p style={{ fontSize: "0.8em" }}> {(props.options?.identity !== undefined && ` id is ${props.options.identity.id}`) || ` ${props.options?.identity?.id}...`} </p>
       {value !== undefined && (
         <h1>
           <span
@@ -332,7 +367,3 @@ export const CounterDemo = (props) => {
     </div>
   );
 };
-
-//const Demo = () => <div>io</div>;
-
-//render(<App />, document.getElementById("root"));

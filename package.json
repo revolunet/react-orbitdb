@@ -1,6 +1,6 @@
 {
   "name": "@decentrasol/react-orbitdb",
-  "version": "0.1.9",
+  "version": "0.2",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -79,11 +79,17 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "dependencies": {
+    "@decentrasol/orbit-db-powergate-io": "0.3.8",
+    "@metamask/detect-provider": "^2.0.0",
+    "aleph-sdk-ts": "^3.2.2",
     "ethers": "^5.7.2",
+    "ipfs": "^0.66.0",
     "logplease": "^1.2.15",
-    "orbit-db-identity-provider": "0.4.0",
-    "ipfs": "^0.59.0",
-    "orbit-db": "^0.28.6",
+    "metamask-react": "^2.4.1",
+    "orbit-db": "^0.29.0",
+    "orbit-db-identity-provider": "^0.5.0",
+    "orbit-db-io": "^3.0.0",
+    "orbit-db-powergate-io": "^0.2.1",
     "uuid": "^9.0.0"
   },
   "scripts": {
