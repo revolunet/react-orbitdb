@@ -1,4 +1,7 @@
 .cache
 dist
+build/
 cjs
 esm
+node_modules
+yarn.lock

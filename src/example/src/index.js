@@ -1,24 +1,31 @@
-import React, { useEffect } from "react";
-import { render } from "react-dom";
-import uuid from "uuid";
+import React, { useEffect,useState } from "react";
+import { v4 as uuid } from 'uuid';
+import { useOrbitDb } from "../../lib";
+import { useMetaMask} from "metamask-react";
 
-import { OrbitProvider, useOrbitDb } from "../../src";
 
-window.LOG = "*";
+// window.LOG = "*";
+// const ORBIT_DB_COUNTER = "react-ortbitdb-counter";
+// const ORBIT_DB_COUNTER = "/orbitdb/zdpuAztsdh7v5kfARfJFFF1natKfbHrEmkZJENFXbuHtQLenz/react-ortbitdb-counter"
 
 const ORBIT_DB_EVENTS = "react-ortbitdb-eventlog";
 //"/orbitdb/zdpuB2cZqW3mNmAM1tZ6mNPpcw6bSdNKNgPw4ppqJpnjS8Teg/react-ortbitdb-eventlog";
 
-const ORBIT_DB_DOCS = "react-ortbitdb-docstore";
+// const ORBIT_DB_DOCS = "react-ortbitdb-docstore";
+const ORBIT_DB_DOCS = "/orbitdb/zdpuAqeFJo4cC7tTDjWeuHMgwdcRRKTNrntzJaPFMSBSBw1jA/react-ortbitdb-docstore/"
 //"/orbitdb/zdpuAknUxcYsKArW2d8KtBhwyLfkmADo4wpwmC8ReKy3Q5pDR/react-ortbitdb-docstore";
 
 const ORBIT_DB_KEYVALUE = "react-ortbitdb-keyvalue";
 //"/orbitdb/zdpuAod4qh5m3SmjuSVtLUEspqp1yCQABWm1iEdSPFDQ5mUkU/react-ortbitdb-keyvalue";
 
-const ORBIT_DB_COUNTER = "react-ortbitdb-counter";
-//"/orbitdb/zdpuAzbF3ZzhMsbtw4vkKoP1BEcH1CbgE1fRMUuykQdcbHe7X/react-ortbitdb-counter";
 
-const Intro = () => (
+// const ORBIT_DB_COUNTER = "/orbitdb/zdpuAxgWxVeeSqia2D4TV8i6V8CFR5o3CTEzW4rQu9erkQvbV/react-ortbitdb-counter"
+// const ORBIT_DB_COUNTER = "/orbitdb/zdpuAnE3pv17bBFDQeLoz8zsvD4EcBNuMUfRB2YtD7gp7kP29/react-ortbitdb-counter"
+// const ORBIT_DB_COUNTER = "/orbitdb/zdpuAm3HjKy98acAPVo6eSC7utPduBo1SMT3foSX85pRTrhcq/react-ortbitdb-counter"
+//"/orbitdb/zdpuAzbF3ZzhMsbtw4vkKoP1BEcH1CbgE1fRMUuykQdcbHe7X/react-ortbitdb-counter";
+// const ORBIT_DB_COUNTER = "/orbitdb/zdpuB2bk9hwdA6HR4hpErvSWybTDjGtvxvTKAvxMuiZSyWFq5/react-ortbitdb-counter"
+
+export const Intro = () => (
   <div className="jumbotron">
     <h1 className="display-4">react-orbitdb</h1>
     <p className="lead">
@@ -67,7 +74,7 @@ const samples = {
 };
 
 const newDocument = () => ({
-  id: uuid(),
+  _id: uuid(),
   title: pick(samples.title),
   date_created: new Date().toISOString(),
   tags: Array.from(
@@ -88,11 +95,10 @@ const getBadgeVariant = (value) => {
   return "primary";
 };
 
-const DocStoreDemo = () => {
+export const DocStoreDemo = (props) => {
   const { db, records } = useOrbitDb(ORBIT_DB_DOCS, {
     type: "docstore",
-    create: true,
-    public: true,
+    ...props.options
   });
   const addDocument = async () => {
     const doc = newDocument();
@@ -132,14 +138,14 @@ const DocStoreDemo = () => {
               {records
                 .reverse()
                 .slice(0, 10)
-                .map((record) => (
-                  <tr key={record.id}>
+                .map((record,i) => (
+                  <tr key={record.id?record.id:i}>
                     <td>{record.date_created}</td>
                     <td>{record.title}</td>
                     <td>
-                      {record.tags.map((tag) => (
+                      {record.tags.map((tag,j) => (
                         <div
-                          key={tag}
+                          key={j}
                           className={`badge badge-${getBadgeVariant(tag)}`}
                           style={{ margin: "0 5px" }}
                         >
@@ -172,11 +178,10 @@ const newKeyValue = () => {
   ];
 };
 
-const KeyValueDemo = () => {
+export const KeyValueDemo = (props) => {
   const { db, records } = useOrbitDb(ORBIT_DB_KEYVALUE, {
     type: "keyvalue",
-    create: true,
-    public: true,
+    ...props.options
   });
   const addKey = async () => {
     const [key, value] = newKeyValue();
@@ -234,28 +239,40 @@ const KeyValueDemo = () => {
   );
 };
 
-const EventLogDemo = () => {
+export const EventLogDemo = (props) => {
+
+  const { status, connect, account, chainId, ethereum, switchChain, addChain } = useMetaMask();
+
   const { db, records } = useOrbitDb(ORBIT_DB_EVENTS, {
     type: "eventlog",
     create: true,
-    public: true,
-  });
+    ...props.options
+  }, props.identity);
+
+  useEffect(() => {
+    if(db) {
+      props.setDB(db)
+      console.log("setting orbitDb", db)}
+  }, [db]);
+
   const addEvent = () => {
     db.add({
       date: new Date().toISOString(),
       ua: navigator.userAgent,
     });
   };
+
   useEffect(() => {
     if (db) {
       // add an event on first load
       addEvent();
     }
   }, [db]);
+
   return (
     <div>
       <p style={{ fontSize: "0.8em" }}>
-        {(records && `Connected to ${ORBIT_DB_EVENTS}`) ||
+        {(records && `Connected to ${db?.id}`) ||
           `Connecting to ${ORBIT_DB_EVENTS}...`}
       </p>
       {records && (
@@ -285,10 +302,10 @@ const EventLogDemo = () => {
               {records
                 .reverse()
                 .slice(0, 10)
-                .map((record) => (
-                  <tr key={record.date}>
+                .map((record,i) => (
+                  <tr key={i}>
                     <td style={{ fontSize: 10 }}>
-                      {record.date}-{record.ua}
+                      {record?.date}-{record?.ua}
                     </td>
                   </tr>
                 ))}
@@ -300,21 +317,36 @@ const EventLogDemo = () => {
   );
 };
 
-const CounterDemo = () => {
-  const { inc, value } = useOrbitDb(ORBIT_DB_COUNTER, {
+export const CounterDemo = (props) => {
+
+  const { inc, value, db } = useOrbitDb( props.db, {
     type: "counter",
     create: true,
-    public: true,
+    ...props.options
   });
+  useEffect(() => {
+    console.log("props.options",props.options)
+  }, [props.options])
+  console.log("identity.db",db?.identity)
+
+  useEffect(() => {
+    console.log("db changed",db)
+    if(db) props.setDB(db)
+  }, [db]);
+
+  if(props.db===undefined){
+    console.log("please provide orbit db prop as the orbit db name  ")
+    return <div> db prop undefined </div>
+  }
   const add = () => {
     inc();
   };
   return (
     <div>
       <p style={{ fontSize: "0.8em" }}>
-        {(value !== undefined && `Connected to ${ORBIT_DB_COUNTER}`) ||
-          `Connecting to ${ORBIT_DB_COUNTER}...`}
+        {(value !== undefined && `Connected to ${db.id}`) || `Connecting to ${props.db}...`}
       </p>
+      <p style={{ fontSize: "0.8em" }}> {(props.options?.identity !== undefined && ` id is ${props.options.identity.id}`) || ` ${props.options?.identity?.id}...`} </p>
       {value !== undefined && (
         <h1>
           <span
@@ -335,29 +367,3 @@ const CounterDemo = () => {
     </div>
   );
 };
-
-const App = () => (
-  <div>
-    <OrbitProvider>
-      <Intro />
-      <h2>counter</h2>
-      <CounterDemo />
-      <br />
-      <h2>eventlog</h2>
-      <EventLogDemo />
-      <br />
-      <h2>docstore</h2>
-      <DocStoreDemo />
-      <br />
-      <h2>keyvalue</h2>
-      <KeyValueDemo />
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
-    </OrbitProvider>
-  </div>
-);
-
-//const Demo = () => <div>io</div>;
-
-render(<App />, document.getElementById("root"));
